@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Happy Birthday Papa!</title>
+<style>
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, #fceabb, #f8b500);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #3a1f0b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    text-align: center;
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 5px #b37400;
+  }
+  #wish {
+    font-size: 1.8rem;
+    margin: 2rem 0;
+    max-width: 600px;
+    background: rgba(255 255 255 / 0.7);
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  button {
+    background-color: #f8b500;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    color: #3a1f0b;
+    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  button:hover {
+    background-color: #d99500;
+    transform: scale(1.05);
+  }
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: #f8b500;
+    opacity: 0.8;
+    top: -10px;
+    animation-name: confetti-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+</style>
+</head>
+<body>
+<h1>Happy Birthday Papa!</h1>
+<div id="wish">Lade deinen Wunsch...</div>
+<button id="newWishBtn">Neuen Wunsch anzeigen</button>
+
+<script>
+  const wishes = [
+    "Alles Gute zum Geburtstag, Papa! Du bist der Beste!",
+    "Herzlichen Glückwunsch zum Geburtstag! Danke für deine Liebe und Unterstützung.",
+    "Ich wünsche dir Gesundheit, Glück und viele schöne Momente im neuen Lebensjahr!",
+    "Papa, du bist mein Held – hab einen fantastischen Geburtstag!",
+    "Möge dein Tag so besonders sein wie du es bist. Happy Birthday!",
+    "Danke, dass du immer für mich da bist. Ich hab dich lieb!",
+    "Feiere heute groß – du hast es mehr als verdient!",
+    "Auf ein weiteres Jahr voller gemeinsamer Erinnerungen und Freude!",
+    "Ich wünsche dir einen Tag voller Lachen, Liebe und leckerem Kuchen!",
+    "Happy Birthday, Papa! Du machst die Welt für uns heller."
+  ];
+
+  const wishEl = document.getElementById('wish');
+  const btn = document.getElementById('newWishBtn');
+
+  function showRandomWish() {
+    const randomIndex = Math.floor(Math.random() * wishes.length);
+    wishEl.textContent = wishes[randomIndex];
+  }
+
+  btn.addEventListener('click', showRandomWish);
+
+  // Initial wish on page load
+  showRandomWish();
+
+  // Confetti generation
+  function createConfetti() {
+    const confettiCount = 40;
+    const colors = ['#f8b500', '#fceabb', '#f4a261', '#e76f51', '#264653'];
+
+    for(let i = 0; i < confettiCount; i++) {
+      const confetti = document.createElement('div');
+      confetti.classList.add('confetti');
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.width = confetti.style.height = (5 + Math.random() * 10) + 'px';
+      confetti.style.animationDuration = (3 + Math.random() * 3) + 's';
+      confetti.style.animationDelay = (Math.random() * 5) + 's';
+      confetti.style.opacity = Math.random() * 0.8 + 0.2;
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      document.body.appendChild(confetti);
+
+      // Remove confetti after animation to keep DOM clean
+      confetti.addEventListener('animationend', () => {
+        confetti.remove();
+        // create new confetti to keep the effect going
+        createConfettiPiece();
+      });
+    }
+  }
+
+  function createConfettiPiece() {
+    const colors = ['#f8b500', '#fceabb', '#f4a261', '#e76f51', '#264653'];
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.width = confetti.style.height = (5 + Math.random() * 10) + 'px';
+    confetti.style.animationDuration = (3 + Math.random() * 3) + 's';
+    confetti.style.animationDelay = '0s';
+    confetti.style.opacity = Math.random() * 0.8 + 0.2;
+    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    document.body.appendChild(confetti);
+    confetti.addEventListener('animationend', () => {
+      confetti.remove();
+      createConfettiPiece();
+    });
+  }
+
+  createConfetti();
+</script>
+</body>
+</html>
