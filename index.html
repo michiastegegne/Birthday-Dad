@@ -1,152 +1,441 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Happy Birthday Papa!</title>
-<style>
-  @keyframes confetti-fall {
-    0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-  }
-  body {
-    margin: 0;
-    background: linear-gradient(135deg, #fceabb, #f8b500);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #3a1f0b;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    text-align: center;
-    padding: 1rem;
-  }
-  h1 {
-    font-size: 4rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 5px #b37400;
-  }
-  #wish {
-    font-size: 1.8rem;
-    margin: 2rem 0;
-    max-width: 600px;
-    background: rgba(255 255 255 / 0.7);
-    padding: 1.5rem 2rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    min-height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  button {
-    background-color: #f8b500;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-    border-radius: 50px;
-    cursor: pointer;
-    color: #3a1f0b;
-    font-weight: 700;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  button:hover {
-    background-color: #d99500;
-    transform: scale(1.05);
-  }
-  .confetti {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background-color: #f8b500;
-    opacity: 0.8;
-    top: -10px;
-    animation-name: confetti-fall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#f8b500" />
+    <title>Happy Birthday Papa!</title>
+    <style>
+        :root {
+            --bg-1: #fceabb;
+            --bg-2: #f8b500;
+            --ink: #3a1f0b;
+            --panel: rgba(255 255 255 / 0.7);
+            --shadow: 0 6px 18px rgba(0,0,0,0.18);
+            --radius: 16px;
+            --gap: 14px;
+            --accent: #d99500;
+        }
+
+        /* Base */
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--ink);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+        }
+        header, footer {
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            text-align: center;
+            text-shadow: 2px 2px 8px #b37400aa;
+        }
+        main {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--gap);
+            width: min(1100px, 100%);
+            margin: 0 auto;
+        }
+        @media (min-width: 880px) {
+            main { grid-template-columns: 1.2fr 1fr; align-items: start; }
+        }
+
+        .card {
+            background: var(--panel);
+            backdrop-filter: blur(6px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+        }
+
+        /* Wishes */
+        #wishBox { display: grid; gap: var(--gap); }
+        #wish {
+            min-height: 110px;
+            display: grid;
+            place-items: center;
+            font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+            padding: 1.2rem 1.4rem;
+            border-radius: 12px;
+            background: rgba(255 255 255 / 0.8);
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+        .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+        button, .btn {
+            background-color: var(--bg-2);
+            border: none;
+            padding: 0.8rem 1.1rem;
+            font-size: 1rem;
+            border-radius: 999px;
+            cursor: pointer;
+            color: var(--ink);
+            font-weight: 700;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transition: transform .15s ease, filter .2s ease;
+        }
+        button:hover { transform: translateY(-1px); filter: brightness(.98); }
+        button:active { transform: translateY(0); }
+        .btn-ghost { background: transparent; box-shadow: none; border: 2px solid var(--ink); }
+        .btn-muted { background: #fff2cc; }
+
+        /* Add wish */
+        form#addWish { display: grid; gap: 8px; }
+        form#addWish input {
+            width: 100%;
+            padding: 0.8rem 0.95rem;
+            border-radius: 12px;
+            border: 1.5px solid #00000022;
+            outline: none;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* Gallery */
+        #galleryWrap { display: grid; gap: var(--gap); }
+        #gallery {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            background: #ffffffa6;
+        }
+        #gallery img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity .5s ease;
+            cursor: pointer;
+            user-select: none;
+            will-change: opacity;
+        }
+        #gallery img.active { opacity: 1; }
+        /* #gallery img.tilt removed */
+        .nav {
+            position: absolute;
+            top: 50%;
+            translate: 0 -50%;
+            display: grid;
+            place-items: center;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: rgba(248,181,0,.9);
+            color: var(--ink);
+            font-weight: 900;
+            border: none; cursor: pointer; user-select: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        }
+        .nav:hover { filter: brightness(.95); }
+        #prev { left: 10px; }
+        #next { right: 10px; }
+        .progress {
+            position: absolute;
+            left: 8px; right: 8px; bottom: 8px;
+            height: 6px;
+            background: rgba(0,0,0,0.15);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress > i { display: block; height: 100%; width: 0%; background: var(--bg-2); }
+
+        /* Dropzone */
+        .dropzone {
+            border: 2px dashed rgba(0,0,0,.25);
+            border-radius: 12px;
+            padding: .9rem;
+            text-align: center;
+            background: rgba(255,255,255,.6);
+        }
+
+        /* Lightbox */
+        dialog#lightbox {
+            width: min(92vw, 1100px);
+            max-height: 92vh;
+            background: #000000ee;
+            border: none; border-radius: 12px; padding: 0;
+        }
+        dialog#lightbox::backdrop { background: rgba(0,0,0,.5); }
+        .lightbox-inner { position: relative; }
+        .lightbox-inner img { display: block; width: 100%; height: auto; }
+        .lightbox-close {
+            position: absolute; top: 8px; right: 8px;
+            background: #ffffff;
+            border: none; border-radius: 999px; width: 40px; height: 40px;
+            font-size: 20px; cursor: pointer;
+        }
+
+        /* Confetti Canvas */
+        #confettiCanvas { position: fixed; inset: 0; pointer-events: none; }
+
+        /* Footer */
+        footer { opacity: .9; font-size: .95rem; }
+
+        /* Print a nice card */
+        @media print {
+            header, .controls, .dropzone, #prev, #next, .progress, footer, #confettiCanvas { display: none !important; }
+            body { background: white; }
+            .card { box-shadow: none; background: white; }
+            #wish { border: 2px solid #00000022; }
+        }
+
+        /* Motion respect */
+        @media (prefers-reduced-motion: reduce) {
+            .animate, .progress > i { transition: none !important; }
+        }
+    </style>
 </head>
 <body>
-<h1>Happy Birthday Papa!</h1>
-<div id="wish">Lade deinen Wunsch...</div>
-<button id="newWishBtn">Neuen Wunsch anzeigen</button>
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
 
-<script>
-  const wishes = [
-    "Alles Gute zum Geburtstag, Papa! Du bist der Beste!",
-    "Herzlichen Glückwunsch zum Geburtstag! Danke für deine Liebe und Unterstützung.",
-    "Ich wünsche dir Gesundheit, Glück und viele schöne Momente im neuen Lebensjahr!",
-    "Papa, du bist mein Held – hab einen fantastischen Geburtstag!",
-    "Möge dein Tag so besonders sein wie du es bist. Happy Birthday!",
-    "Danke, dass du immer für mich da bist. Ich hab dich lieb!",
-    "Feiere heute groß – du hast es mehr als verdient!",
-    "Auf ein weiteres Jahr voller gemeinsamer Erinnerungen und Freude!",
-    "Ich wünsche dir einen Tag voller Lachen, Liebe und leckerem Kuchen!",
-    "Happy Birthday, Papa! Du machst die Welt für uns heller."
-  ];
+    <header>
+        <h1 aria-live="polite">Happy Birthday Papa! 🎉</h1>
+    </header>
 
-  const wishEl = document.getElementById('wish');
-  const btn = document.getElementById('newWishBtn');
+    <main>
+        <!-- Wishes -->
+        <section class="card" id="wishBox" aria-labelledby="wishes-h">
+            <h2 id="wishes-h" style="margin:0 0 .25rem 0">Glueckwünsche</h2>
+            <p id="wish">Lade deinen Wunsch...</p>
+            <div class="actions controls" role="group" aria-label="Wunschaktionen">
+                <button id="newWishBtn" title="Zufaelliger Wunsch">Neuen Wunsch</button>
+                <button id="toggleConfetti" class="btn-ghost" title="Konfetti umschalten">Konfetti: An</button>
+            </div>
+        </section>
 
-  function showRandomWish() {
-    const randomIndex = Math.floor(Math.random() * wishes.length);
-    wishEl.textContent = wishes[randomIndex];
-  }
+        <!-- Gallery -->
+        <section class="card" id="galleryWrap" aria-labelledby="gallery-h">
+            <h2 id="gallery-h" style="margin:0 0 .25rem 0">Mini-Galerie</h2>
+            <div id="gallery" aria-live="polite">
+                <button id="prev" class="nav" aria-label="Vorheriges Bild">&#10094;</button>
+                <button id="next" class="nav" aria-label="Naechstes Bild">&#10095;</button>
+                <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+                <img src="./Photos/01.png" alt="Bild 1" class="active" />
+                <img src="./Photos/02.JPG" alt="Bild 2" />
+                <img src="./Photos/03.JPG" alt="Bild 3" />
+                <img src="./Photos/04.JPG" alt="Bild 4" />
+                <img src="./Photos/05.JPG" alt="Bild 5" />
+            </div>
+            <div class="actions controls" role="group" aria-label="Slideshow">
+                <button id="playPause">Autoplay: An</button>
+                <button id="fullscreen">Vollbild</button>
+            </div>
+        </section>
+    </main>
 
-  btn.addEventListener('click', showRandomWish);
+    <footer>
+        <span>Mit Liebe gebaut – druckbar als Karte, offline faehig (nach erstem Laden).</span>
+    </footer>
 
-  // Initial wish on page load
-  showRandomWish();
+    <dialog id="lightbox" aria-label="Grossansicht">
+        <div class="lightbox-inner">
+            <img alt="Grossansicht" />
+            <button class="lightbox-close" aria-label="Schliessen">✕</button>
+        </div>
+    </dialog>
 
-  // Confetti generation
-  function createConfetti() {
-    const confettiCount = 40;
-    const colors = ['#f8b500', '#fceabb', '#f4a261', '#e76f51', '#264653'];
+    <script>
+        // Utility
+        function $(sel, root = document) { return root.querySelector(sel); }
+        function $all(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    for(let i = 0; i < confettiCount; i++) {
-      const confetti = document.createElement('div');
-      confetti.classList.add('confetti');
-      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.left = Math.random() * 100 + 'vw';
-      confetti.style.width = confetti.style.height = (5 + Math.random() * 10) + 'px';
-      confetti.style.animationDuration = (3 + Math.random() * 3) + 's';
-      confetti.style.animationDelay = (Math.random() * 5) + 's';
-      confetti.style.opacity = Math.random() * 0.8 + 0.2;
-      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-      document.body.appendChild(confetti);
+        // Wishes data + persistence
+        const DEFAULT_WISHES = [
+            "Alles Gute zum Geburtstag, Papa! Du bist der Beste!",
+            "Herzlichen Glueckwunsch zum Geburtstag! Danke fuer deine Liebe und Unterstuetzung.",
+            "Ich wünsche dir Gesundheit, Glueck und viele schoene Momente im neuen Lebensjahr!",
+            "Papa, du bist mein Held – hab einen fantastischen Geburtstag!",
+            "Moege dein Tag so besonders sein wie du es bist. Happy Birthday!",
+            "Danke, dass du immer fuer mich da bist. Ich hab dich lieb!",
+            "Feiere heute gross – du hast es mehr als verdient!",
+            "Auf ein weiteres Jahr voller gemeinsamer Erinnerungen und Freude!",
+            "Ich wünsche dir einen Tag voller Lachen, Liebe und leckerem Kuchen!",
+            "Happy Birthday, Papa! Du machst die Welt fuer uns heller."
+        ];
+        const wishEl = $('#wish');
+        const nextBtn = $('#newWishBtn');
+        const toggleConfettiBtn = $('#toggleConfetti');
 
-      // Remove confetti after animation to keep DOM clean
-      confetti.addEventListener('animationend', () => {
-        confetti.remove();
-        // create new confetti to keep the effect going
-        createConfettiPiece();
-      });
-    }
-  }
+        let availableWishes = [];
+        function refillWishes() {
+            availableWishes = [...DEFAULT_WISHES];
+        }
+        function showRandomWish() {
+            if (availableWishes.length === 0) refillWishes();
+            const idx = Math.floor(Math.random() * availableWishes.length);
+            const text = availableWishes.splice(idx, 1)[0];
+            wishEl.textContent = text;
+        }
 
-  function createConfettiPiece() {
-    const colors = ['#f8b500', '#fceabb', '#f4a261', '#e76f51', '#264653'];
-    const confetti = document.createElement('div');
-    confetti.classList.add('confetti');
-    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    confetti.style.left = Math.random() * 100 + 'vw';
-    confetti.style.width = confetti.style.height = (5 + Math.random() * 10) + 'px';
-    confetti.style.animationDuration = (3 + Math.random() * 3) + 's';
-    confetti.style.animationDelay = '0s';
-    confetti.style.opacity = Math.random() * 0.8 + 0.2;
-    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-    document.body.appendChild(confetti);
-    confetti.addEventListener('animationend', () => {
-      confetti.remove();
-      createConfettiPiece();
-    });
-  }
+        nextBtn.addEventListener('click', showRandomWish);
 
-  createConfetti();
-</script>
+        refillWishes();
+        showRandomWish();
+
+        // Gallery logic
+        const gallery = $('#gallery');
+        const images = () => $all('#gallery img');
+        const prev = $('#prev');
+        const next = $('#next');
+        const bar = $('#bar');
+        const playPause = $('#playPause');
+        const fullscreenBtn = $('#fullscreen');
+        let currentIndex = 0;
+        let autoplay = !prefersReduced;
+        let intervalMs = 3500;
+        let timer = null;
+        let progressTimer = null;
+
+        function showImage(index) {
+            const list = images();
+            if (list.length === 0) return;
+            index = (index + list.length) % list.length;
+            list.forEach((img, i) => img.classList.toggle('active', i === index));
+            currentIndex = index;
+            resetProgress();
+        }
+        function nextImage() { showImage(currentIndex + 1); }
+        function prevImage() { showImage(currentIndex - 1); }
+
+        function startAutoplay() {
+            stopAutoplay();
+            if (!autoplay) return;
+            timer = setInterval(nextImage, intervalMs);
+            startProgress();
+        }
+        function stopAutoplay() {
+            clearInterval(timer); timer = null;
+            stopProgress();
+        }
+        function toggleAutoplay() {
+            autoplay = !autoplay;
+            playPause.textContent = `Autoplay: ${autoplay ? 'An' : 'Aus'}`;
+            autoplay ? startAutoplay() : stopAutoplay();
+        }
+        function startProgress() {
+            stopProgress();
+            let start = performance.now();
+            function tick(now) {
+                const p = Math.min(1, (now - start) / intervalMs);
+                bar.style.width = (p * 100).toFixed(1) + '%';
+                if (p < 1 && timer) progressTimer = requestAnimationFrame(tick);
+            }
+            progressTimer = requestAnimationFrame(tick);
+        }
+        function stopProgress() { cancelAnimationFrame(progressTimer); bar.style.width = '0%'; }
+        function resetProgress() { if (timer) { stopProgress(); startProgress(); } }
+
+
+        prev.addEventListener('click', () => { prevImage(); startAutoplay(); });
+        next.addEventListener('click', () => { nextImage(); startAutoplay(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') { next.click(); }
+            if (e.key === 'ArrowLeft') { prev.click(); }
+        });
+        playPause.addEventListener('click', () => { toggleAutoplay(); });
+
+
+        // Fullscreen / Lightbox
+        const lightbox = $('#lightbox');
+        const lbImg = $('img', lightbox);
+        const lbClose = $('.lightbox-close', lightbox);
+        gallery.addEventListener('click', (e) => {
+            const img = e.target.closest('img');
+            if (!img) return;
+            lbImg.src = img.src;
+            if (typeof lightbox.showModal === 'function') lightbox.showModal();
+        });
+        lbClose.addEventListener('click', () => lightbox.close());
+        // Vollbild-Button plattformübergreifend (WebKit/MS Fallbacks)
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                if (gallery.requestFullscreen) gallery.requestFullscreen();
+                else if (gallery.webkitRequestFullscreen) gallery.webkitRequestFullscreen();
+                else if (gallery.msRequestFullscreen) gallery.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        });
+
+
+        // Confetti (Canvas, lightweight)
+        const confettiCanvas = $('#confettiCanvas');
+        const ctx = confettiCanvas.getContext('2d');
+        let confettiEnabled = !prefersReduced;
+        let confettiPieces = [];
+        function resizeCanvas() { confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight; }
+        addEventListener('resize', resizeCanvas); resizeCanvas();
+        function spawnPiece() {
+            return {
+                x: Math.random() * confettiCanvas.width,
+                y: -10,
+                s: 5 + Math.random() * 7,
+                vy: 60 + Math.random() * 80,
+                vx: -30 + Math.random() * 60,
+                r: Math.random() * Math.PI,
+                vr: (-1 + Math.random() * 2) * 2,
+                c: ['#f8b500','#fceabb','#f4a261','#e76f51','#264653'][Math.floor(Math.random()*5)]
+            };
+        }
+        function initConfetti(n = 120) { confettiPieces = Array.from({length: n}, spawnPiece); }
+        function stepConfetti(dt) {
+            ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+            for (const p of confettiPieces) {
+                p.y += p.vy * dt; p.x += p.vx * dt; p.r += p.vr * dt;
+                if (p.y > confettiCanvas.height + 10) { Object.assign(p, spawnPiece(), { y: -10 }); }
+                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+                ctx.fillStyle = p.c; ctx.fillRect(-p.s/2, -p.s/2, p.s, p.s);
+                ctx.restore();
+            }
+        }
+        let last = performance.now();
+        function loop(now) {
+            const dt = Math.min(0.033, (now - last) / 1000); last = now;
+            if (confettiEnabled) stepConfetti(dt);
+            requestAnimationFrame(loop);
+        }
+        if (!prefersReduced) { initConfetti(); requestAnimationFrame(loop); }
+        toggleConfettiBtn.addEventListener('click', () => {
+            confettiEnabled = !confettiEnabled;
+            toggleConfettiBtn.textContent = `Konfetti: ${confettiEnabled ? 'An' : 'Aus'}`;
+            if (confettiEnabled && confettiPieces.length === 0) initConfetti();
+            if (!confettiEnabled) ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+        });
+
+        // Start slideshow on load
+        if (autoplay) startAutoplay();
+
+        // Simple offline capability (cache on first load)
+        if ('serviceWorker' in navigator) {
+            try {
+                const swBlob = new Blob([
+                    `self.addEventListener('install', e=>{e.waitUntil(caches.open('hb-v1').then(c=>c.addAll(['./'])))});\nself.addEventListener('fetch', e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})`
+                ], { type: 'text/javascript' });
+                const swUrl = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swUrl);
+            } catch {}
+        }
+    </script>
 </body>
 </html>
