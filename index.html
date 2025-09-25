@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+    <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -209,69 +209,127 @@
     <canvas id="confettiCanvas" aria-hidden="true"></canvas>
 
     <header>
-        <h1 aria-live="polite">Happy Birthday Papa! 🎉</h1>
+        <h1 aria-live="polite">Happy Birthday Dad! 🎉</h1>
+        <div id="countdown" style="margin-top:1rem;font-size:1.33rem;font-weight:500;text-align:center;color:#a05d00;"></div>
     </header>
 
     <main>
         <!-- Wishes -->
         <section class="card" id="wishBox" aria-labelledby="wishes-h">
-            <h2 id="wishes-h" style="margin:0 0 .25rem 0">Glueckwünsche</h2>
-            <p id="wish">Lade deinen Wunsch...</p>
-            <div class="actions controls" role="group" aria-label="Wunschaktionen">
-                <button id="newWishBtn" title="Zufaelliger Wunsch">Neuen Wunsch</button>
-                <button id="toggleConfetti" class="btn-ghost" title="Konfetti umschalten">Konfetti: An</button>
+            <h2 id="wishes-h" style="margin:0 0 .25rem 0">Birthday Wishes</h2>
+            <p id="wish">Loading your wish...</p>
+            <div class="actions controls" role="group" aria-label="Wish actions">
+                <button id="newWishBtn" title="Random wish">New Wish</button>
+                <button id="toggleConfetti" class="btn-ghost" title="Toggle confetti">Confetti: On</button>
             </div>
         </section>
 
         <!-- Gallery -->
         <section class="card" id="galleryWrap" aria-labelledby="gallery-h">
-            <h2 id="gallery-h" style="margin:0 0 .25rem 0">Mini-Galerie</h2>
+            <h2 id="gallery-h" style="margin:0 0 .25rem 0">Mini Gallery</h2>
             <div id="gallery" aria-live="polite">
-                <button id="prev" class="nav" aria-label="Vorheriges Bild">&#10094;</button>
-                <button id="next" class="nav" aria-label="Naechstes Bild">&#10095;</button>
+                <button id="prev" class="nav" aria-label="Previous image">&#10094;</button>
+                <button id="next" class="nav" aria-label="Next image">&#10095;</button>
                 <div class="progress" aria-hidden="true"><i id="bar"></i></div>
-                <img src="./Photos/01.png" alt="Bild 1" class="active" />
-                <img src="./Photos/02.JPG" alt="Bild 2" />
-                <img src="./Photos/03.JPG" alt="Bild 3" />
-                <img src="./Photos/04.JPG" alt="Bild 4" />
-                <img src="./Photos/05.JPG" alt="Bild 5" />
+                <img src="./Photos/01.png" alt="Photo 1" class="active" />
+                <img src="./Photos/02.JPG" alt="Photo 2" />
+                <img src="./Photos/03.JPG" alt="Photo 3" />
+                <img src="./Photos/04.JPG" alt="Photo 4" />
+                <img src="./Photos/05.JPG" alt="Photo 5" />
             </div>
             <div class="actions controls" role="group" aria-label="Slideshow">
-                <button id="playPause">Autoplay: An</button>
-                <button id="fullscreen">Vollbild</button>
+                <button id="playPause">Autoplay: On</button>
+                <button id="fullscreen">Fullscreen</button>
             </div>
         </section>
+
+        <!-- Personal Message -->
+        <section class="card" id="personal-message" aria-labelledby="personal-message-h" style="margin-top:1.5rem;">
+            <h2 id="personal-message-h" style="margin:0 0 .25rem 0;">Personal Message</h2>
+            <div style="padding: 0.5rem 0.2rem;">
+                <p style="font-size:1.18rem; line-height:1.7; margin:0;">
+                    Lieber Papa,<br>
+                    <br>
+                    ich möchte dir nicht nur zum Geburtstag gratulieren, sondern dir auch sagen, wie dankbar ich für all die schönen Momente und deine ständige Unterstützung bin.<br>
+                    <br>
+                    Du bist immer für mich da gewesen, hast zugehört, geholfen und mich zum Lachen gebracht. Ich wünsche dir von Herzen Gesundheit, Freude und viele weitere unvergessliche Erlebnisse.<br>
+                    <br>
+                    Ich hab dich sehr lieb!<br>
+                    <span style="display:inline-block;margin-top:0.6em;font-weight:600;">Dein Michi</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Quote Block -->
+        <section class="card" id="zitat-block" aria-labelledby="zitat-h" style="margin-top:1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <h2 id="zitat-h" style="margin:0 0 .5rem 0; text-align:center;">Favorite Quote</h2>
+            <blockquote style="font-size:1.35rem; font-style:italic; text-align:center; padding:1.2rem 1.2rem; margin:0; line-height:1.7;">
+                „ick schwer, die beschte von die welt! - Papa“
+            </blockquote>
+        </section>
+
     </main>
 
     <footer>
-        <span>Mit Liebe gebaut – druckbar als Karte, offline faehig (nach erstem Laden).</span>
+        <span>Built with love – printable as a card, works offline (after first load).</span>
     </footer>
 
-    <dialog id="lightbox" aria-label="Grossansicht">
+    <dialog id="lightbox" aria-label="Enlarged view">
         <div class="lightbox-inner">
-            <img alt="Grossansicht" />
-            <button class="lightbox-close" aria-label="Schliessen">✕</button>
+            <img alt="Enlarged view" />
+            <button class="lightbox-close" aria-label="Close">✕</button>
         </div>
     </dialog>
 
+    <!-- html2canvas CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
+        // Countdown Timer
+        (function() {
+            const countdownEl = document.getElementById('countdown');
+            // Set fixed birthday: 27 September 2026
+            function getNextBirthday() {
+                // 27 September 2026, 00:00:00
+                return new Date(2026, 8, 27, 0, 0, 0, 0); // Month is 0-based: 8 = September
+            }
+            function updateCountdown() {
+                const now = new Date();
+                const next = getNextBirthday();
+                let diff = next - now;
+                if (diff < 0) diff = 0;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / (1000 * 60)) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+                let text = '';
+                if (diff === 0) {
+                    text = 'Today is the birthday! 🎂';
+                } else {
+                    text = `Only <b>${days}</b> day${days!==1?'s':''}, <b>${hours}</b> hrs, <b>${mins}</b> min, <b>${secs}</b> sec until the next birthday!`;
+                }
+                countdownEl.innerHTML = text;
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        })();
+
         // Utility
         function $(sel, root = document) { return root.querySelector(sel); }
         function $all(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // Wishes data + persistence
-        const DEFAULT_WISHES = [
-            "Alles Gute zum Geburtstag, Papa! Du bist der Beste!",
-            "Herzlichen Glueckwunsch zum Geburtstag! Danke fuer deine Liebe und Unterstuetzung.",
-            "Ich wünsche dir Gesundheit, Glueck und viele schoene Momente im neuen Lebensjahr!",
-            "Papa, du bist mein Held – hab einen fantastischen Geburtstag!",
-            "Moege dein Tag so besonders sein wie du es bist. Happy Birthday!",
-            "Danke, dass du immer fuer mich da bist. Ich hab dich lieb!",
-            "Feiere heute gross – du hast es mehr als verdient!",
-            "Auf ein weiteres Jahr voller gemeinsamer Erinnerungen und Freude!",
-            "Ich wünsche dir einen Tag voller Lachen, Liebe und leckerem Kuchen!",
-            "Happy Birthday, Papa! Du machst die Welt fuer uns heller."
+        // Birthday wishes list
+        const wishes = [
+            "Happy Birthday, Dad! You are the best!",
+            "Congratulations on your birthday! Thank you for your love and support.",
+            "Wishing you health, happiness, and many wonderful moments in the coming year!",
+            "Dad, you are my hero – have a fantastic birthday!",
+            "May your day be as special as you are. Happy Birthday!",
+            "Thank you for always being there for me. Love you!",
+            "Celebrate big today – you more than deserve it!",
+            "To another year full of shared memories and joy!",
+            "Wishing you a day full of laughter, love, and delicious cake!",
+            "Happy Birthday, Dad! You make the world brighter for us."
         ];
         const wishEl = $('#wish');
         const nextBtn = $('#newWishBtn');
@@ -279,7 +337,7 @@
 
         let availableWishes = [];
         function refillWishes() {
-            availableWishes = [...DEFAULT_WISHES];
+            availableWishes = [...wishes];
         }
         function showRandomWish() {
             if (availableWishes.length === 0) refillWishes();
@@ -330,7 +388,7 @@
         }
         function toggleAutoplay() {
             autoplay = !autoplay;
-            playPause.textContent = `Autoplay: ${autoplay ? 'An' : 'Aus'}`;
+            playPause.textContent = `Autoplay: ${autoplay ? 'On' : 'Off'}`;
             autoplay ? startAutoplay() : stopAutoplay();
         }
         function startProgress() {
@@ -367,7 +425,7 @@
             if (typeof lightbox.showModal === 'function') lightbox.showModal();
         });
         lbClose.addEventListener('click', () => lightbox.close());
-        // Vollbild-Button plattformübergreifend (WebKit/MS Fallbacks)
+        // Fullscreen button cross-platform (WebKit/MS fallbacks)
         fullscreenBtn.addEventListener('click', () => {
             if (!document.fullscreenElement) {
                 if (gallery.requestFullscreen) gallery.requestFullscreen();
@@ -420,7 +478,7 @@
         if (!prefersReduced) { initConfetti(); requestAnimationFrame(loop); }
         toggleConfettiBtn.addEventListener('click', () => {
             confettiEnabled = !confettiEnabled;
-            toggleConfettiBtn.textContent = `Konfetti: ${confettiEnabled ? 'An' : 'Aus'}`;
+            toggleConfettiBtn.textContent = `Confetti: ${confettiEnabled ? 'On' : 'Off'}`;
             if (confettiEnabled && confettiPieces.length === 0) initConfetti();
             if (!confettiEnabled) ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
         });
