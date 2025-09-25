@@ -133,6 +133,7 @@
         .nav {
             position: absolute;
             top: 50%;
+            left: 0;
             translate: 0 -50%;
             display: grid;
             place-items: center;
@@ -143,10 +144,11 @@
             font-weight: 900;
             border: none; cursor: pointer; user-select: none;
             box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            z-index: 10;
         }
         .nav:hover { filter: brightness(.95); }
-        #prev { left: 10px; }
-        #next { right: 10px; }
+        #prev { left: 10px; right: auto; }
+        #next { right: 10px; left: auto; }
         .progress {
             position: absolute;
             left: 8px; right: 8px; bottom: 8px;
