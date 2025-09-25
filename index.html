@@ -43,15 +43,20 @@
             text-shadow: 2px 2px 8px #b37400aa;
         }
         main {
-            padding: 1.5rem;
+            padding: 2.2rem 1.5rem 2.5rem 1.5rem;
             display: grid;
             grid-template-columns: 1fr;
-            gap: var(--gap);
+            gap: calc(var(--gap) * 2.1);
             width: min(1100px, 100%);
             margin: 0 auto;
+            justify-items: center;
         }
         @media (min-width: 880px) {
-            main { grid-template-columns: 1.2fr 1fr; align-items: start; }
+            main {
+                grid-template-columns: 1.2fr 1fr;
+                align-items: stretch;
+                gap: calc(var(--gap) * 2.2) calc(var(--gap) * 2.5);
+            }
         }
 
         .card {
@@ -59,21 +64,44 @@
             backdrop-filter: blur(6px);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 1rem;
+            padding: 1.25rem 1.1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        @media (min-width: 880px) {
+            .card {
+                max-width: unset;
+                width: 100%;
+            }
+            #wishBox.card, #galleryWrap.card {
+                min-width: 0;
+            }
         }
 
         /* Wishes */
-        #wishBox { display: grid; gap: var(--gap); }
+        #wishBox {
+            display: grid;
+            gap: calc(var(--gap) * 1.2);
+            width: 100%;
+            justify-items: center;
+        }
         #wish {
-            min-height: 110px;
+            min-height: 260px;
             display: grid;
             place-items: center;
-            font-size: clamp(1.2rem, 2.6vw, 1.6rem);
-            padding: 1.2rem 1.4rem;
-            border-radius: 12px;
-            background: rgba(255 255 255 / 0.8);
+            font-size: clamp(1.23rem, 2.8vw, 1.7rem);
+            padding: 2.5rem 2rem;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.83);
             box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
             text-align: center;
+            word-break: break-word;
+            width: 100%;
+            max-width: 510px;
+            margin: 0 auto;
         }
         .actions { display: flex; flex-wrap: wrap; gap: 10px; }
         button, .btn {
@@ -106,7 +134,12 @@
         }
 
         /* Gallery */
-        #galleryWrap { display: grid; gap: var(--gap); }
+        #galleryWrap {
+            display: grid;
+            gap: calc(var(--gap) * 1.1);
+            width: 100%;
+            justify-items: center;
+        }
         #gallery {
             position: relative;
             width: 100%;
@@ -189,7 +222,72 @@
         #confettiCanvas { position: fixed; inset: 0; pointer-events: none; }
 
         /* Footer */
-        footer { opacity: .9; font-size: .95rem; }
+        footer {
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(90deg, #f8b500e6 0%, #fceabbcc 100%);
+            box-shadow: 0 -1px 12px #f8b50044;
+            opacity: 1;
+            letter-spacing: 0.01em;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            margin-top: 1.5rem;
+            min-height: 3.5rem;
+            backdrop-filter: blur(3px);
+        }
+
+        /* Quote Block */
+        #zitat-block {
+            margin-top: 1.7rem !important;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #zitat-block blockquote {
+            font-size: 1.35rem;
+            font-style: italic;
+            text-align: center;
+            padding: 1.2rem 1.2rem;
+            margin: 0;
+            line-height: 1.7;
+            width: 100%;
+            max-width: 460px;
+        }
+        @media (max-width: 600px) {
+            #zitat-block blockquote {
+                font-size: 1.08rem;
+                padding: 1rem 0.5rem;
+            }
+        }
+
+        /* Personal Message */
+        #personal-message {
+            margin-top: 1.5rem !important;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #personal-message p {
+            font-size: 1.19rem;
+            line-height: 1.7;
+            margin: 0;
+            text-align: center;
+        }
+        @media (max-width: 700px) {
+            #personal-message p {
+                font-size: 1.05rem;
+            }
+        }
 
         /* Print a nice card */
         @media print {
@@ -224,25 +322,6 @@
             </div>
         </section>
 
-        <!-- Gallery -->
-        <section class="card" id="galleryWrap" aria-labelledby="gallery-h">
-            <h2 id="gallery-h" style="margin:0 0 .25rem 0">Mini Gallery</h2>
-            <div id="gallery" aria-live="polite">
-                <button id="prev" class="nav" aria-label="Previous image">&#10094;</button>
-                <button id="next" class="nav" aria-label="Next image">&#10095;</button>
-                <div class="progress" aria-hidden="true"><i id="bar"></i></div>
-                <img src="./Photos/01.png" alt="Photo 1" class="active" />
-                <img src="./Photos/02.JPG" alt="Photo 2" />
-                <img src="./Photos/03.JPG" alt="Photo 3" />
-                <img src="./Photos/04.JPG" alt="Photo 4" />
-                <img src="./Photos/05.JPG" alt="Photo 5" />
-            </div>
-            <div class="actions controls" role="group" aria-label="Slideshow">
-                <button id="playPause">Autoplay: On</button>
-                <button id="fullscreen">Fullscreen</button>
-            </div>
-        </section>
-
         <!-- Personal Message -->
         <section class="card" id="personal-message" aria-labelledby="personal-message-h" style="margin-top:1.5rem;">
             <h2 id="personal-message-h" style="margin:0 0 .25rem 0;">Personal Message</h2>
@@ -260,6 +339,25 @@
             </div>
         </section>
 
+        <!-- Gallery -->
+        <section class="card" id="galleryWrap" aria-labelledby="gallery-h">
+            <h2 id="gallery-h" style="margin:0 0 .25rem 0">Mini Gallery</h2>
+            <div id="gallery" aria-live="polite">
+                <button id="prev" class="nav" aria-label="Previous image">&#10094;</button>
+                <button id="next" class="nav" aria-label="Next image">&#10095;</button>
+                <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+                <img src="./Photos/01.png" alt="Photo 1" class="active" />
+                <img src="./Photos/02.JPG" alt="Photo 2" />
+                <img src="./Photos/03.JPG" alt="Photo 3" />
+                <img src="./Photos/04.jpg" alt="Photo 4" />
+                <img src="./Photos/05.jpg" alt="Photo 5" />
+            </div>
+            <div class="actions controls" role="group" aria-label="Slideshow">
+                <button id="playPause">Autoplay: On</button>
+                <button id="fullscreen">Fullscreen</button>
+            </div>
+        </section>
+
         <!-- Quote Block -->
         <section class="card" id="zitat-block" aria-labelledby="zitat-h" style="margin-top:1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <h2 id="zitat-h" style="margin:0 0 .5rem 0; text-align:center;">Favorite Quote</h2>
@@ -271,7 +369,7 @@
     </main>
 
     <footer>
-        <span>Built with love – printable as a card, works offline (after first load).</span>
+        <span>Built with love by Michias – Happy Birthday Papa!</span>
     </footer>
 
     <dialog id="lightbox" aria-label="Enlarged view">
@@ -329,7 +427,107 @@
             "Celebrate big today – you more than deserve it!",
             "To another year full of shared memories and joy!",
             "Wishing you a day full of laughter, love, and delicious cake!",
-            "Happy Birthday, Dad! You make the world brighter for us."
+            "Happy Birthday, Dad! You make the world brighter for us.",
+            "You age like fine wine – just getting better every year!",
+            "To the man, the myth, the legend – happy birthday!",
+            "Hope your birthday is as cool as your dad jokes!",
+            "Enjoy your day, you absolute legend!",
+            "Dad, you’re not old, you’re just well seasoned!",
+            "May your birthday cake be as sweet as you are!",
+            "Cheers to you and all your wisdom (and snacks)!",
+            "Another year, another reason to celebrate how awesome you are!",
+            "Wishing you a year full of happiness, health, and naps!",
+            "You’re the king of the grill and the king of our hearts.",
+            "Keep calm and birthday on!",
+            "You make fatherhood look easy – and fun!",
+            "May your day be filled with laughter, love, and zero chores.",
+            "Happy Birthday to the family’s MVP!",
+            "You’re not just a year older, you’re a year cooler.",
+            "Hope you get to eat all your favorite things today!",
+            "To the world’s greatest dad: have a blast!",
+            "May your coffee be strong and your birthday be long!",
+            "Wishing you endless happiness and plenty of dad naps.",
+            "You’re proof that dads only get better with age.",
+            "Your hugs are the best gift – but here’s a wish too!",
+            "Have a birthday as epic as your dance moves!",
+            "May today be filled with all your favorite things.",
+            "You’re the best at everything – especially birthdays!",
+            "To the man who can fix anything – even birthdays!",
+            "May you always find the remote and never run out of snacks.",
+            "You’re my role model, my coach, and my favorite guy.",
+            "Wishing you a birthday full of fun and zero stress.",
+            "Happy Birthday to the man who taught me everything I know!",
+            "You’re the captain of our ship – full speed ahead to a great year!",
+            "Hope your day is as awesome as your grilling skills.",
+            "To the dad who always knows the answer (or Googles it fast).",
+            "May your birthday be filled with love, laughter, and cake!",
+            "Thanks for all the dad jokes and life lessons.",
+            "You’re the best thing since sliced bread – and you make better sandwiches too!",
+            "Have a chilled, relaxed, and totally awesome birthday.",
+            "To the guy who always makes us laugh – happy birthday!",
+            "May your day be legendary, just like you.",
+            "You put the 'rad' in 'dad'!",
+            "Wishing you a day that’s as fantastic as your taste in music.",
+            "Hope you get to put your feet up and relax today!",
+            "To the dad who always brings the fun – have a blast!",
+            "You’re not just a year older, you’re a year wiser (and funnier).",
+            "Wishing you an endless supply of your favorite snacks!",
+            "May your birthday be the start of your best year yet.",
+            "You’re the family’s rock – hope your day rocks too!",
+            "Here’s to you, your stories, and your epic dad jokes.",
+            "You deserve all the good things today – and every day!",
+            "Hope your day is full of surprises (the good kind).",
+            "To the man who can do it all – happy birthday!",
+            "May your birthday be filled with good vibes and great company.",
+            "You make every day brighter – especially today!",
+            "Wishing you a birthday that’s as cool as your sock collection.",
+            "You’re the GOAT – Greatest Of All Time!",
+            "To the dad who’s always up for an adventure.",
+            "May all your birthday wishes come true (except the embarrassing ones).",
+            "You’re the best dad – hands down, no contest.",
+            "Hope your day is full of laughs and good cheer.",
+            "You’re always there for us – now let us celebrate you!",
+            "To the guy who makes every day awesome.",
+            "May your birthday be as epic as your dad skills.",
+            "You’re a classic – and classics never go out of style.",
+            "Wishing you a day of relaxation and zero responsibilities.",
+            "You’re the family’s superhero – cape or not!",
+            "Hope you get to do all your favorite things today.",
+            "To the dad who never runs out of patience (or dad jokes).",
+            "You make life sweeter – have an extra slice of cake!",
+            "Wishing you lots of love, laughter, and good food.",
+            "You’re the best listener, teacher, and friend.",
+            "May your birthday be as fun as your childhood pranks.",
+            "You’re the heart of our family – happy birthday!",
+            "Hope your day is filled with smiles and happy memories.",
+            "You’re the master of the BBQ and the king of birthdays.",
+            "May your birthday be full of joy, love, and good company.",
+            "You’re the best at embarrassing us – and we love you for it!",
+            "Wishing you a birthday that’s as awesome as your dad skills.",
+            "You’re my favorite superhero (and you don’t even need a cape).",
+            "Hope your day is as cool as your puns.",
+            "You’re the best dad anyone could wish for.",
+            "Wishing you a year full of laughter, adventure, and happiness.",
+            "You’re not just my dad, you’re my best friend.",
+            "May your day be filled with everything you love.",
+            "Hope your birthday is full of fun, food, and family.",
+            "To the world’s greatest role model – happy birthday!",
+            "You’re the reason our family is so awesome.",
+            "Hope today brings you as much happiness as you’ve given us.",
+            "You’re a legend, Dad – have a legendary birthday!",
+            "Wishing you a day that’s as amazing as you are.",
+            "You make every day an adventure – enjoy your special day!",
+            "Happy birthday to the king of dad jokes!",
+            "You’re the best at making us laugh – keep it up!",
+            "May your birthday be filled with good food and great company.",
+            "You’re the dad everyone wishes they had.",
+            "Hope your birthday is as joyful as your spirit.",
+            "To the man who can fix anything – even birthdays!",
+            "You’re the best gift we could ever ask for.",
+            "Wishing you a day of relaxation, laughter, and love.",
+            "You’re the best, Dad – today and every day!",
+            "Here’s to you and another awesome year ahead!",
+            "Happy birthday to the coolest dad in the universe!"
         ];
         const wishEl = $('#wish');
         const nextBtn = $('#newWishBtn');
