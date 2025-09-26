@@ -203,19 +203,122 @@
 
         /* Lightbox */
         dialog#lightbox {
-            width: min(92vw, 1100px);
-            max-height: 92vh;
-            background: #000000ee;
-            border: none; border-radius: 12px; padding: 0;
+            /* Fullscreen overlay, modern look */
+            width: 100vw;
+            height: 100vh;
+            max-width: 100vw;
+            max-height: 100vh;
+            background: rgba(0,0,0,0.85);
+            border: none;
+            border-radius: 0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
-        dialog#lightbox::backdrop { background: rgba(0,0,0,.5); }
-        .lightbox-inner { position: relative; }
-        .lightbox-inner img { display: block; width: 100%; height: auto; }
+        dialog#lightbox::backdrop { background: rgba(0,0,0,.85); }
+        .lightbox-inner {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox-inner img {
+            display: block;
+            max-width: 100vw;
+            max-height: 90vh;
+            margin: 0 auto;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.32);
+            background: #fff;
+            transition: opacity .35s cubic-bezier(.4,0,.2,1), transform .35s cubic-bezier(.4,0,.2,1);
+            opacity: 1;
+            transform: scale(1);
+        }
+        dialog[open] .lightbox-inner img {
+            opacity: 1;
+            transform: scale(1);
+        }
         .lightbox-close {
-            position: absolute; top: 8px; right: 8px;
-            background: #ffffff;
-            border: none; border-radius: 999px; width: 40px; height: 40px;
-            font-size: 20px; cursor: pointer;
+            position: absolute;
+            top: 28px;
+            right: 32px;
+            background: rgba(255,255,255,0.72);
+            border: none;
+            border-radius: 999px;
+            width: 44px;
+            height: 44px;
+            font-size: 1.6rem;
+            color: #222;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s;
+            z-index: 20;
+        }
+        .lightbox-close:hover, .lightbox-close:focus {
+            background: rgba(255,255,255,0.93);
+        }
+        .lightbox-prev, .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.25);
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 2.1rem;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.16);
+            opacity: 0;
+            transition: opacity 0.22s, background 0.18s;
+            z-index: 10;
+        }
+        .lightbox-prev:hover, .lightbox-next:hover, .lightbox-prev:focus, .lightbox-next:focus {
+            background: rgba(255,255,255,0.45);
+            color: #222;
+        }
+        .lightbox-prev { left: 24px; }
+        .lightbox-next { right: 24px; }
+        dialog#lightbox:hover .lightbox-prev,
+        dialog#lightbox:hover .lightbox-next,
+        dialog#lightbox:focus-within .lightbox-prev,
+        dialog#lightbox:focus-within .lightbox-next {
+            opacity: 1;
+        }
+        @media (max-width: 700px) {
+            .lightbox-inner img {
+                max-width: 100vw;
+                max-height: 60vh;
+                border-radius: 8px;
+            }
+            .lightbox-close {
+                top: 12px;
+                right: 12px;
+                width: 38px;
+                height: 38px;
+                font-size: 1.3rem;
+            }
+            .lightbox-prev, .lightbox-next {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+                top: unset;
+                bottom: 18px;
+                transform: none;
+                opacity: 1;
+                background: rgba(255,255,255,0.32);
+            }
+            .lightbox-prev { left: 18vw; right: auto; }
+            .lightbox-next { right: 18vw; left: auto; }
         }
 
         /* Confetti Canvas */
@@ -297,6 +400,81 @@
             #wish { border: 2px solid #00000022; }
         }
 
+        /* Mobile optimizations */
+        @media (max-width: 500px) {
+            body {
+                padding: 1rem;
+            }
+            main {
+                padding: 1rem 0.2rem 1.3rem 0.2rem;
+                gap: 1.1rem;
+            }
+            header {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.9rem 0.5rem;
+            }
+            header h1 {
+                font-size: 1.6rem;
+            }
+            #countdown {
+                font-size: 1rem !important;
+                margin-top: 0.7rem !important;
+            }
+            .card {
+                padding: 1rem 0.5rem;
+                border-radius: 10px;
+                max-width: 100%;
+            }
+            #wish {
+                min-height: 180px;
+                font-size: 1rem;
+                padding: 1.1rem 0.6rem;
+                border-radius: 10px;
+            }
+            #wishBox {
+                gap: 0.8rem;
+            }
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.6rem;
+            }
+            button, .btn {
+                width: 100%;
+                min-width: 0;
+                font-size: 1rem;
+            }
+            #gallery {
+                aspect-ratio: 4/3;
+                border-radius: 10px;
+            }
+            .nav {
+                width: 32px;
+                height: 32px;
+                font-size: 1.1rem;
+            }
+            .progress {
+                height: 4px;
+            }
+            #personal-message > div {
+                padding: 0.3rem 0.1rem !important;
+            }
+            #personal-message p {
+                font-size: 1rem !important;
+                padding: 0.2rem 0.1rem !important;
+            }
+            #zitat-block blockquote {
+                font-size: 1rem !important;
+                padding: 0.5rem 0.2rem !important;
+            }
+            footer {
+                font-size: 1rem;
+                padding: 0.8rem 0.3rem;
+                min-height: 2.3rem;
+            }
+        }
+
         /* Motion respect */
         @media (prefers-reduced-motion: reduce) {
             .animate, .progress > i { transition: none !important; }
@@ -374,8 +552,10 @@
 
     <dialog id="lightbox" aria-label="Enlarged view">
         <div class="lightbox-inner">
+            <button class="lightbox-prev" aria-label="Previous image" tabindex="0">‹</button>
             <img alt="Enlarged view" />
-            <button class="lightbox-close" aria-label="Close">✕</button>
+            <button class="lightbox-next" aria-label="Next image" tabindex="0">›</button>
+            <button class="lightbox-close" aria-label="Close" tabindex="0">✕</button>
         </div>
     </dialog>
 
@@ -577,11 +757,14 @@
         function startAutoplay() {
             stopAutoplay();
             if (!autoplay) return;
-            timer = setInterval(nextImage, intervalMs);
+            timer = setInterval(() => {
+                nextImage();
+            }, intervalMs);
             startProgress();
         }
         function stopAutoplay() {
-            clearInterval(timer); timer = null;
+            if (timer) clearInterval(timer);
+            timer = null;
             stopProgress();
         }
         function toggleAutoplay() {
@@ -595,16 +778,32 @@
             function tick(now) {
                 const p = Math.min(1, (now - start) / intervalMs);
                 bar.style.width = (p * 100).toFixed(1) + '%';
-                if (p < 1 && timer) progressTimer = requestAnimationFrame(tick);
+                // Only continue if timer is active and autoplay is on
+                if (p < 1 && timer && autoplay) {
+                    progressTimer = requestAnimationFrame(tick);
+                }
             }
             progressTimer = requestAnimationFrame(tick);
         }
-        function stopProgress() { cancelAnimationFrame(progressTimer); bar.style.width = '0%'; }
-        function resetProgress() { if (timer) { stopProgress(); startProgress(); } }
+        function stopProgress() {
+            if (progressTimer) cancelAnimationFrame(progressTimer);
+            progressTimer = null;
+            bar.style.width = '0%';
+        }
+        function resetProgress() {
+            stopProgress();
+            if (timer && autoplay) startProgress();
+        }
 
 
-        prev.addEventListener('click', () => { prevImage(); startAutoplay(); });
-        next.addEventListener('click', () => { nextImage(); startAutoplay(); });
+        prev.addEventListener('click', () => {
+            prevImage();
+            resetProgress();
+        });
+        next.addEventListener('click', () => {
+            nextImage();
+            resetProgress();
+        });
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') { next.click(); }
             if (e.key === 'ArrowLeft') { prev.click(); }
@@ -616,15 +815,55 @@
         const lightbox = $('#lightbox');
         const lbImg = $('img', lightbox);
         const lbClose = $('.lightbox-close', lightbox);
+        const lbPrev = $('.lightbox-prev', lightbox);
+        const lbNext = $('.lightbox-next', lightbox);
+
+        // Lightbox should NOT be open by default or on page load.
+        // Only openLightbox on gallery image click.
+        function openLightbox(index) {
+            // Clamp index and show image in lightbox
+            const imgs = images();
+            if (!imgs.length) return;
+            currentIndex = ((index % imgs.length) + imgs.length) % imgs.length;
+            lbImg.src = imgs[currentIndex].src;
+            lbImg.alt = imgs[currentIndex].alt || "Enlarged view";
+            if (typeof lightbox.showModal === 'function') lightbox.showModal();
+        }
+
+        // Only open lightbox on gallery image click
         gallery.addEventListener('click', (e) => {
             const img = e.target.closest('img');
             if (!img) return;
-            lbImg.src = img.src;
-            if (typeof lightbox.showModal === 'function') lightbox.showModal();
+            const imgs = images();
+            const idx = imgs.indexOf(img);
+            if (idx !== -1) openLightbox(idx);
+        });
+
+        // Lightbox navigation
+        function lightboxShowRelative(d) {
+            const imgs = images();
+            if (!imgs.length) return;
+            let idx = ((currentIndex + d) % imgs.length + imgs.length) % imgs.length;
+            lbImg.src = imgs[idx].src;
+            lbImg.alt = imgs[idx].alt || "Enlarged view";
+            currentIndex = idx;
+        }
+        lbPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            lightboxShowRelative(-1);
+        });
+        lbNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            lightboxShowRelative(1);
         });
         lbClose.addEventListener('click', () => lightbox.close());
-        // Fullscreen button cross-platform (WebKit/MS fallbacks)
+
+        // Fullscreen button: only use Fullscreen API for desktop, no lightbox on mobile
         fullscreenBtn.addEventListener('click', () => {
+            // Only use Fullscreen API on desktop (not mobile/touch devices)
+            // Detect mobile by touch support (not perfect, but practical here)
+            const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 1;
+            if (isMobile) return;
             if (!document.fullscreenElement) {
                 if (gallery.requestFullscreen) gallery.requestFullscreen();
                 else if (gallery.webkitRequestFullscreen) gallery.webkitRequestFullscreen();
@@ -634,6 +873,35 @@
                 else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
                 else if (document.msExitFullscreen) document.msExitFullscreen();
             }
+        });
+
+        // Keyboard support for lightbox
+        lightbox.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                lightbox.close();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                lbPrev.click();
+            }
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                lbNext.click();
+            }
+        });
+
+        // Clicking outside the .lightbox-inner or on dialog backdrop closes lightbox
+        lightbox.addEventListener('click', (e) => {
+            const inner = $('.lightbox-inner', lightbox);
+            // Only close if click is on dialog itself (not bubbled from inner)
+            if (e.target === lightbox) {
+                lightbox.close();
+            }
+        });
+        // Prevent click events on .lightbox-inner or its children from closing lightbox
+        $('.lightbox-inner', lightbox).addEventListener('click', (e) => {
+            e.stopPropagation();
         });
 
 
