@@ -512,14 +512,11 @@
             <h2 id="personal-message-h" style="margin:0 0 .25rem 0;">Personal Message</h2>
             <div style="padding: 0.5rem 0.2rem;">
                 <p style="font-size:1.18rem; line-height:1.7; margin:0;">
-                    Lieber Papa,<br>
-                    <br>
-                    ich möchte dir nicht nur zum Geburtstag gratulieren, sondern dir auch sagen, wie dankbar ich für all die schönen Momente und deine ständige Unterstützung bin.<br>
-                    <br>
-                    Du bist immer für mich da gewesen, hast zugehört, geholfen und mich zum Lachen gebracht. Ich wünsche dir von Herzen Gesundheit, Freude und viele weitere unvergessliche Erlebnisse.<br>
-                    <br>
-                    Ich hab dich sehr lieb!<br>
-                    <span style="display:inline-block;margin-top:0.6em;font-weight:600;">Dein Michi</span>
+                    እናቱ አባቴ ውድ,<br><br>
+                    ልደትህ ደስ ያለ ይሁን! ስለ ሁሉም ፍቅርህ፣ ጽድቅህ እና ድጋፍህ ከልቤ እናመሰግናለሁ። ሁልጊዜ ከእኔ ጋር ነህ፣ እንደምታስቀምጥኝ እና በሕይወቴ ሁሉ በግልጽ እንዲሆን እንደምትረዳኝ፣ በጣም እገዛለሁ።<br><br>
+                    እንደምታምርህ፣ ደስታ፣ እና በአዲሱ ዓመት ብዙ አስደሳች ሁኔታዎች እንዲኖሩህ እመኛለሁ።<br><br>
+                    እገዛህን እና ፍቅርህን እወዳለሁ!<br>
+                    <span style="display:inline-block;margin-top:0.6em;font-weight:600;">የኔ ሚቺ</span>
                 </p>
             </div>
         </section>
@@ -537,6 +534,11 @@
                 <img src="./Photos/04.jpg" alt="Photo 4" />
                 <img src="./Photos/05.jpg" alt="Photo 5" />
                 <img src="./Photos/06.jpg" alt="Photo 6" />
+                <img src="./Photos/07.jpg" alt="Photo 7" />
+                <img src="./Photos/08.jpg" alt="Photo 8" />
+                <img src="./Photos/09.jpg" alt="Photo 9" />
+                <img src="./Photos/10.jpg" alt="Photo 10" />
+                <img src="./Photos/11.jpg" alt="Photo 11" />
             </div>
             <div class="actions controls" role="group" aria-label="Slideshow">
                 <button id="playPause">Autoplay: On</button>
@@ -566,10 +568,10 @@
         // Countdown Timer
         (function() {
             const countdownEl = document.getElementById('countdown');
-            // Set fixed birthday: 27 September 2026
+            // Set fixed birthday: 26 September 2026
             function getNextBirthday() {
-                // 27 September 2026, 00:00:00
-                return new Date(2026, 8, 27, 0, 0, 0, 0); // Month is 0-based: 8 = September
+                // 26 September 2026, 00:00:00
+                return new Date(2026, 8, 26, 0, 0, 0, 0); // Month is 0-based: 8 = September
             }
             function updateCountdown() {
                 const now = new Date();
