@@ -87,6 +87,7 @@
             gap: calc(var(--gap) * 1.2);
             width: 100%;
             justify-items: center;
+            order: 1;
         }
         #wish {
             min-height: 260px;
@@ -139,6 +140,7 @@
             gap: calc(var(--gap) * 1.1);
             width: 100%;
             justify-items: center;
+            order: 2;
         }
         #gallery {
             position: relative;
@@ -213,10 +215,13 @@
             border-radius: 0;
             margin: 0;
             padding: 0;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+        }
+        dialog#lightbox[open] {
+            display: flex;
         }
         dialog#lightbox::backdrop { background: rgba(0,0,0,.85); }
         .lightbox-inner {
@@ -353,6 +358,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            order: 4;
         }
         #zitat-block blockquote {
             font-size: 1.35rem;
@@ -379,6 +385,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            order: 3;
         }
         #personal-message p {
             font-size: 1.19rem;
@@ -529,6 +536,7 @@
                 <img src="./Photos/03.JPG" alt="Photo 3" />
                 <img src="./Photos/04.jpg" alt="Photo 4" />
                 <img src="./Photos/05.jpg" alt="Photo 5" />
+                <img src="./Photos/06.jpg" alt="Photo 6" />
             </div>
             <div class="actions controls" role="group" aria-label="Slideshow">
                 <button id="playPause">Autoplay: On</button>
@@ -550,14 +558,7 @@
         <span>Built with love by Michias – Happy Birthday Papa!</span>
     </footer>
 
-    <dialog id="lightbox" aria-label="Enlarged view">
-        <div class="lightbox-inner">
-            <button class="lightbox-prev" aria-label="Previous image" tabindex="0">‹</button>
-            <img alt="Enlarged view" />
-            <button class="lightbox-next" aria-label="Next image" tabindex="0">›</button>
-            <button class="lightbox-close" aria-label="Close" tabindex="0">✕</button>
-        </div>
-    </dialog>
+    <dialog id="lightbox" aria-label="Enlarged view"></dialog>
 
     <!-- html2canvas CDN -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -813,31 +814,79 @@
 
         // Fullscreen / Lightbox
         const lightbox = $('#lightbox');
-        const lbImg = $('img', lightbox);
-        const lbClose = $('.lightbox-close', lightbox);
-        const lbPrev = $('.lightbox-prev', lightbox);
-        const lbNext = $('.lightbox-next', lightbox);
+        // Remove any initial .lightbox-inner from dialog, if present (should not be at pageload)
+        while (lightbox.firstChild) lightbox.removeChild(lightbox.firstChild);
+
+        // No <img> in lightbox at pageload!
+        // Only create .lightbox-inner and controls when opening the lightbox
+        let lbImg = null;
+        let lbPrev = null, lbNext = null, lbClose = null;
+
+        // Remove any event listeners or code that opens lightbox on image click
+        // (No code present for that in this script, but ensure none is added)
+
+        // Dynamically create .lightbox-inner with image, prev/next, close
+        function createLightboxInner() {
+            // Remove previous content
+            while (lightbox.firstChild) lightbox.removeChild(lightbox.firstChild);
+            // .lightbox-inner wrapper
+            const inner = document.createElement('div');
+            inner.className = 'lightbox-inner';
+            // Prev button
+            lbPrev = document.createElement('button');
+            lbPrev.className = 'lightbox-prev';
+            lbPrev.type = 'button';
+            lbPrev.setAttribute('aria-label', 'Previous image');
+            lbPrev.innerHTML = '&#10094;';
+            // Next button
+            lbNext = document.createElement('button');
+            lbNext.className = 'lightbox-next';
+            lbNext.type = 'button';
+            lbNext.setAttribute('aria-label', 'Next image');
+            lbNext.innerHTML = '&#10095;';
+            // Image
+            lbImg = document.createElement('img');
+            lbImg.alt = "Enlarged view";
+            // Close button
+            lbClose = document.createElement('button');
+            lbClose.className = 'lightbox-close';
+            lbClose.type = 'button';
+            lbClose.setAttribute('aria-label', 'Close');
+            lbClose.innerHTML = '&times;';
+            // Compose
+            inner.appendChild(lbPrev);
+            inner.appendChild(lbImg);
+            inner.appendChild(lbNext);
+            inner.appendChild(lbClose);
+            lightbox.appendChild(inner);
+            // Events
+            lbPrev.addEventListener('click', (e) => {
+                e.stopPropagation();
+                lightboxShowRelative(-1);
+            });
+            lbNext.addEventListener('click', (e) => {
+                e.stopPropagation();
+                lightboxShowRelative(1);
+            });
+            lbClose.addEventListener('click', () => lightbox.close());
+            // Prevent click events on .lightbox-inner or its children from closing lightbox
+            inner.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
 
         // Lightbox should NOT be open by default or on page load.
-        // Only openLightbox on gallery image click.
+        // Only openLightbox on fullscreen button click.
         function openLightbox(index) {
             // Clamp index and show image in lightbox
             const imgs = images();
             if (!imgs.length) return;
             currentIndex = ((index % imgs.length) + imgs.length) % imgs.length;
+            createLightboxInner();
             lbImg.src = imgs[currentIndex].src;
             lbImg.alt = imgs[currentIndex].alt || "Enlarged view";
             if (typeof lightbox.showModal === 'function') lightbox.showModal();
         }
-
-        // Only open lightbox on gallery image click
-        gallery.addEventListener('click', (e) => {
-            const img = e.target.closest('img');
-            if (!img) return;
-            const imgs = images();
-            const idx = imgs.indexOf(img);
-            if (idx !== -1) openLightbox(idx);
-        });
 
         // Lightbox navigation
         function lightboxShowRelative(d) {
@@ -848,31 +897,10 @@
             lbImg.alt = imgs[idx].alt || "Enlarged view";
             currentIndex = idx;
         }
-        lbPrev.addEventListener('click', (e) => {
-            e.stopPropagation();
-            lightboxShowRelative(-1);
-        });
-        lbNext.addEventListener('click', (e) => {
-            e.stopPropagation();
-            lightboxShowRelative(1);
-        });
-        lbClose.addEventListener('click', () => lightbox.close());
 
-        // Fullscreen button: only use Fullscreen API for desktop, no lightbox on mobile
+        // Fullscreen button: open lightbox instead of Fullscreen API
         fullscreenBtn.addEventListener('click', () => {
-            // Only use Fullscreen API on desktop (not mobile/touch devices)
-            // Detect mobile by touch support (not perfect, but practical here)
-            const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 1;
-            if (isMobile) return;
-            if (!document.fullscreenElement) {
-                if (gallery.requestFullscreen) gallery.requestFullscreen();
-                else if (gallery.webkitRequestFullscreen) gallery.webkitRequestFullscreen();
-                else if (gallery.msRequestFullscreen) gallery.msRequestFullscreen();
-            } else {
-                if (document.exitFullscreen) document.exitFullscreen();
-                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                else if (document.msExitFullscreen) document.msExitFullscreen();
-            }
+            openLightbox(currentIndex);
         });
 
         // Keyboard support for lightbox
@@ -881,11 +909,11 @@
                 e.preventDefault();
                 lightbox.close();
             }
-            if (e.key === 'ArrowLeft') {
+            if (e.key === 'ArrowLeft' && lbPrev) {
                 e.preventDefault();
                 lbPrev.click();
             }
-            if (e.key === 'ArrowRight') {
+            if (e.key === 'ArrowRight' && lbNext) {
                 e.preventDefault();
                 lbNext.click();
             }
@@ -893,16 +921,14 @@
 
         // Clicking outside the .lightbox-inner or on dialog backdrop closes lightbox
         lightbox.addEventListener('click', (e) => {
-            const inner = $('.lightbox-inner', lightbox);
             // Only close if click is on dialog itself (not bubbled from inner)
             if (e.target === lightbox) {
                 lightbox.close();
             }
         });
-        // Prevent click events on .lightbox-inner or its children from closing lightbox
-        $('.lightbox-inner', lightbox).addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
+
+        // Remove any event listeners that open the lightbox on gallery image click
+        // (No-op: do not add any such event listeners here.)
 
 
         // Confetti (Canvas, lightweight)
